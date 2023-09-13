@@ -1,0 +1,104 @@
+<div class="container">
+  <header class="header">
+    <div>ITeam</div>
+  </header>
+
+  <div>
+    <form [formGroup]="formInfo">
+      <div class="form-group">
+        <label for="firstName">Ім'я<span class="requared">*</span></label>
+        <input id="firstName" formControlName="firstName" type="text" placeholder="Ім'я">
+        <div class="error" *ngIf="firstName.errors?.['required'] && (firstName.touched || firstName.dirty)">
+          Заповніть поле Ім'я
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">Прізвище<span class="requared">*</span></label>
+        <input id="lastName" formControlName="lastName" type="text" placeholder="Прізвище">
+        <div class="error" *ngIf="lastName.errors?.['required'] && (lastName.touched || lastName.dirty)">
+          Заповніть поле Прізвище
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="birthdate">День народження<span class="requared">*</span></label>
+        <div class="input-group">
+          <input id="birthdate" name="dateOfBirth" formControlName="dateOfBirth" class="form-control"
+            placeholder="рррр-мм-дд" name="dp" [(ngModel)]="birthdate" ngbDatepicker #d="ngbDatepicker" />
+          <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+        </div>
+        <div class="error" *ngIf="dateOfBirth.errors?.['required'] && (dateOfBirth.touched || dateOfBirth.dirty)">
+          Заповніть поле День народження
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="frameworkSelect">Виберіть технологію JS<span class="requared">*</span>:</label>
+        <select formControlName="framework" id="frameworkSelect" name="framework" [(ngModel)]="selectedFramework" (change)="onFrameworkChange()">
+          <option *ngFor="let tech of technology" [value]="tech.name">{{ tech.name }}</option>
+        </select>
+        <div class="error" *ngIf="framework.errors?.['required'] && (framework.touched || framework.dirty)">
+          Виберіть технологію JS
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="versionSelect">Виберіть версію<span class="requared">*</span></label>
+        <select formControlName="frameworkVersion" name="frameworkVersion" id="versionSelect"
+         [disabled]="selectedFramework === undefined"  [(ngModel)]="selectedVersion">
+          <option *ngFor="let version of frameworkVersions[selectedFramework]" [value]="version">{{ version }}</option>
+        </select>
+        <div class="error"
+          *ngIf="frameworkVersion.errors?.['required'] && (frameworkVersion.touched || frameworkVersion.dirty)">
+          Виберіть версію
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email<span class="requared">*</span></label>
+        <input id="email" formControlName="email" name="email" [(ngModel)]="enteredEmail"
+          type="text" placeholder="Email">
+        <div class="error" *ngIf="formInfo.get('email')?.hasError('emailTaken')">
+          Електронна пошта вже існує.
+        </div>
+          <div class="error" *ngIf="email.errors?.['required'] && (email.touched || email.dirty)">
+          Заповніть поле Email
+        </div>
+        <div class="error" *ngIf="email.errors?.['email'] && (email.touched || email.dirty)">
+          Неправильний Email
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="hobby">Мої хобі<span class="requared">*</span></label>
+        <div *ngFor="let hobby of hobbies">
+          <div class="hobby-view">{{hobby.name}} {{hobby.duration}}</div>
+        </div>
+        <form class="form-hobby" [formGroup]="hobbyForm">
+          <div>
+            <input id="hobby" name="hobby" formControlName="hobby" type="text" [(ngModel)]="hobbyName"
+            placeholder="Назва хобі">
+        <!--     <div class="error" *ngIf="hobbyForm.get('hobby')?.hasError('required')">
+              Заповніть поле Назва хобі
+            </div> -->
+          </div>
+         <div>
+          <input id="duration" type="text" name="duration" formControlName="duration" [(ngModel)]="durationName"
+          placeholder="Тривалість">
+     <!--      <div class="error" *ngIf="hobbyForm.get('duration')?.hasError('required')">
+            Заповніть поле Тривалість
+          </div> -->
+         </div>
+         <button class="hobby-btn" (click)="addHobby()">Додати хобі</button>
+        </form>
+       
+        <div *ngIf="errorHobby" class="error">Додайте хоча б одне хобі</div>
+      </div>
+      <button class="post-btn" (click)="postForm()">
+        Відправити
+      </button>
+    </form>
+
+  </div>
+</div>
